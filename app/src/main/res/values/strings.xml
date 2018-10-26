@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">NotifyMe</string>
+    <string name="task">Task :</string>
+    <string name="enter_task_name_here">Enter task Name Here</string>
+    <string name="type">Type :</string>
+    <string name="from">From :</string>
+    <string name="to">To :</string>
+    <string name="notify_at">Notify at :</string>
+    <string name="make_it_a_habit">Make it a habit </string>
 </resources>
