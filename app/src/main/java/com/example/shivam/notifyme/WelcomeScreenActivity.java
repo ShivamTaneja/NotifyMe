@@ -44,5 +44,4 @@ public class WelcomeScreenActivity extends WelcomeActivity {
                 .exitAnimation(android.R.anim.fade_out)
                 .build();
     }
-
 }

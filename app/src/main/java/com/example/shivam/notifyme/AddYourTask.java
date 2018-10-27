@@ -1,5 +1,8 @@
 package com.example.shivam.notifyme;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,23 +48,6 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(arrayAdapter);
 
-        //calendar
-        calendarViewFrom = findViewById(R.id.simpleCalendarViewFrom);
-        calendarViewTo = findViewById(R.id.simpleCalendarViewTo);
-
-
-        buttonSave = findViewById(R.id.buttonSave);
-        buttonSave.setOnClickListener ( new View . OnClickListener () {
-                                            @Override
-                                            public void onClick(View view) {
-
-                                     }
-                                        }
-            );
-
-        makeItAHabit = findViewById(R.id.checkboxMakeItAHabit);
-
-
         //time picker
         timePickerNotifyAt = findViewById(R.id.timepickerNotifyAt);
         timePickerNotifyAt.setIs24HourView(false); // used to display AM/PM mode
@@ -72,6 +58,28 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
 
             }
         });
+
+        //calendar
+        calendarViewFrom = findViewById(R.id.simpleCalendarViewFrom);
+        calendarViewTo = findViewById(R.id.simpleCalendarViewTo);
+
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, timePickerNotifyAt.getCurrentHour());
+                calendar.set(Calendar.MINUTE, timePickerNotifyAt.getCurrentMinute());
+                Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+        );
+
+        makeItAHabit = findViewById(R.id.checkboxMakeItAHabit);
+
 }
 
     @Override
