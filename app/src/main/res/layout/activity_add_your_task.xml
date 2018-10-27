@@ -199,5 +199,16 @@
             android:layout_margin="@dimen/tendp"
             android:background="@color/teal_800" />
 
+        <Button
+            android:id = "@+id/buttonSave"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/tendp"
+            android:background = "@drawable/button_round"
+            android:text="@string/Save"
+            android:textColor = "@color/white"
+            android:textSize = "@dimen/twentysp"/>
+
     </LinearLayout>
 </ScrollView>
