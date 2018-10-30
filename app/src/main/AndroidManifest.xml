@@ -24,7 +24,7 @@
         <activity android:name=".Activity.Performance" />
         <activity android:name=".Activity.AboutUs" />
         <activity android:name=".Activity.Settings" />
-        <activity android:name=".Activity.Notifications"></activity>
+        <activity android:name=".Activity.Notifications"/>
     </application>
 
 </manifest>
