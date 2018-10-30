@@ -9,18 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeScreen">
+        <activity android:name=".Activity.HomeScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddYourTask" />
+        <activity android:name=".Activity.AddYourTask" />
         <activity
-            android:name=".WelcomeScreenActivity"
+            android:name=".Activity.WelcomeScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/WelcomeScreenTheme" />
+        <activity android:name=".Activity.Settings" />
+        <activity android:name=".Activity.Notifications" />
+        <activity android:name=".Activity.AboutUs" />
+        <activity android:name=".Activity.Performance"></activity>
     </application>
 
 </manifest>

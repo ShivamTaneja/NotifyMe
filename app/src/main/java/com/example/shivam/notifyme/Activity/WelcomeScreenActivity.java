@@ -1,5 +1,6 @@
-package com.example.shivam.notifyme;
+package com.example.shivam.notifyme.Activity;
 
+import com.example.shivam.notifyme.R;
 import com.stephentuso.welcome.ParallaxPage;
 import com.stephentuso.welcome.WelcomeActivity;
 import com.stephentuso.welcome.WelcomeConfiguration;
