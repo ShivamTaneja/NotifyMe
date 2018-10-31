@@ -1,7 +1,10 @@
 package com.example.shivam.notifyme.Activity;
 
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,10 +18,14 @@ import android.widget.Toast;
 
 import com.example.shivam.notifyme.R;
 
+import java.sql.Time;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddYourTask extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private static final String CHANNEL_ID = "task_notifications";
+    private static final int NOTIFICATION_ID = 001;
     EditText editTask; // task name
     Spinner spin; // spinner for type of task and their values are stored in taskNames;
     CalendarView calendarViewFrom; // to choose dates from
@@ -56,12 +63,20 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
         // perform set on time changed listener event
         timePickerNotifyAt.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) { 
+                
             }
         });
+        int hourOfDay = timePickerNotifyAt.getCurrentHour();
+        int minute = timePickerNotifyAt.getCurrentMinute();
+
 
         //calendar
+        Date currentTime = calendar.getInstance().getTime();
+        int currentHours = currentTime.getHours();
+        int currentMinutes = currentTime.getMinutes();
+        
+        
         calendarViewFrom = findViewById(R.id.simpleCalendarViewFrom);
         calendarViewTo = findViewById(R.id.simpleCalendarViewTo);
 
@@ -82,15 +97,27 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
 
         makeItAHabit = findViewById(R.id.checkboxMakeItAHabit);
 
+        checkConditionForNotification(currentHours, currentMinutes, hourOfDay, minute);
+        
 }
 
-/*    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-            .setContentTitle(taskNameInput)
-            .setContentText(taskTypeSelected)
-            .setWhen(calendar)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+    private void checkConditionForNotification(int currentHours, int currentMinutes, int hourOfDay, int minute)
+    {
+      if(currentHours == hourOfDay && currentMinutes == minute)
+      {
+          Log.d("twitter", currentHours + " " + hourOfDay + " " + currentMinutes + " " + minute + " " + taskNameInput);
+          NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                  .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                  .setContentTitle(taskNameInput)
+                  .setContentText(taskTypeSelected)
+                  .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+          NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+          notificationManagerCompat.notify(NOTIFICATION_ID ,mBuilder.build());
+      }
+    }
+
+/*    
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
