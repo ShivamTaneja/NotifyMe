@@ -26,6 +26,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setContentIntent(pendingIntent)
                 .setContentTitle("Task Time")
+                .setSmallIcon(android.R.drawable.ic_dialog_alert)
                 .setContentText("Yout task is ready to be performed")
                 .setAutoCancel(true);
 
