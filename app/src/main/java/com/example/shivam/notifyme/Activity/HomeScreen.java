@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import com.example.shivam.notifyme.NotificationActivity;
+
 import com.example.shivam.notifyme.R;
 import com.stephentuso.welcome.WelcomeHelper;
 

@@ -1,7 +1,9 @@
-package com.example.shivam.notifyme;
+package com.example.shivam.notifyme.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.shivam.notifyme.R;
 
 public class NotificationActivity extends AppCompatActivity {
 

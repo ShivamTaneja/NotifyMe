@@ -1,5 +1,8 @@
 package com.example.shivam.notifyme.Activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.example.shivam.notifyme.Others.NotificationReceiver;
 import com.example.shivam.notifyme.R;
 import java.util.Calendar;
 import java.util.Date;
@@ -74,18 +79,27 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onClick(View view) {
 
-            taskNameInput = editTask.getText().toString();
-            if(TextUtils.isEmpty(taskNameInput))
-            {
-                Toast.makeText(getApplicationContext(),"Task Name is missing",Toast.LENGTH_SHORT).show();
-                return;
-            }
-            hourOfDay = timePickerNotifyAt.getCurrentHour();
-            minute = timePickerNotifyAt.getCurrentMinute();
+                taskNameInput = editTask.getText().toString();
+                if(TextUtils.isEmpty(taskNameInput))
+                {
+                    Toast.makeText(getApplicationContext(),"Task Name is missing",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                hourOfDay = timePickerNotifyAt.getCurrentHour();
+                minute = timePickerNotifyAt.getCurrentMinute();
 
-            Date currentTime = calendar.getInstance().getTime();
-            currentHours = currentTime.getHours();
-            currentMinutes = currentTime.getMinutes();
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND,1);
+
+                Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+                intent.setAction("Task");
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
+                        100, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                        AlarmManager.INTERVAL_DAY, pendingIntent);
 
             Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_SHORT).show();
             finish();
