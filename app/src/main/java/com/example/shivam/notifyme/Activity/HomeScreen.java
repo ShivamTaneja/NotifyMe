@@ -8,11 +8,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
+import com.example.shivam.notifyme.NotificationActivity;
 import com.example.shivam.notifyme.R;
 import com.stephentuso.welcome.WelcomeHelper;
 
@@ -137,7 +135,7 @@ public class HomeScreen extends AppCompatActivity {
                     case R.id.nav_notifications:
                         navItemIndex = 2;
                         CURRENT_TAG = TAG_NOTIFICATIONS;
-                        intent = new Intent(getApplicationContext(),Notifications.class);
+                        intent = new Intent(getApplicationContext(),NotificationActivity.class);
                         startActivity(intent);
                         drawer.closeDrawers();
                         break;
