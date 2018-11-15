@@ -21,6 +21,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/drawer_layout" />
 
+    <ListView
+        android:id="@+id/listview"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 <android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -57,7 +63,7 @@
         android:clickable="true"
         android:focusable="true"
         app:backgroundTint="@color/colorPrimary"
-        android:src="@drawable/ic_add_black_24dp"
+        app:srcCompat="@drawable/ic_add_black_24dp"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
