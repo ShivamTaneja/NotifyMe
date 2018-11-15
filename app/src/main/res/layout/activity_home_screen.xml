@@ -8,6 +8,7 @@
     tools:context=".Activity.HomeScreen">
 
     <TextView
+        android:id="@+id/defaultTextView"
         android:layout_width="244dp"
         android:layout_height="148dp"
         android:layout_marginStart="8dp"

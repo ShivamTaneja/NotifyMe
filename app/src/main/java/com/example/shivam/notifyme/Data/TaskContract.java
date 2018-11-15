@@ -21,7 +21,8 @@ public final class TaskContract {
         public static final String COLUMN_TASK_TYPE = "TaskType";
         public static final String COLUMN_TASk_STARTING_DATE = "FromDate";
         public static final String COLUMN_TASk_ENDING_DATE = "ToDate";
-        public static final String COLUMN_TASk_NOTIFICATION_TIME = "NotifyTime";
+        public static final String COLUMN_TASk_NOTIFICATION_TIME_HOUR = "NotifyTimeHour";
+        public static final String COLUMN_TASk_NOTIFICATION_TIME_MINUTE = "NotifyTimeMinute";
         public static final String COLUMN_TASk_MAKE_IT_A_HABIT = "MakeItAHabit";
         public static final String COLUMN_TASk_NUMBER_OF_DAYS_PERFORMED = "NumberOfDaysTaskPerformed";
         public static final String COLUMN_TASk_TOTAL_NUMBER_OF_DAYS = "TotalNumberOfDays";

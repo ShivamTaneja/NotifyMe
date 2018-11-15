@@ -6,26 +6,25 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private String DATABASE_NAME="Task.db";
-    private Integer DATABASE_VERSION = 1;
+    private final static String DATABASE_NAME="Task.db";
+    private final static Integer DATABASE_VERSION = 2;
 
     String SQL_CREATE_ENTRIES = "CREATE TABLE " + TaskContract.TaskEntry.TABLE_NAME +  " ( "
-            + TaskContract.TaskEntry.COLUMN_TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT , "
-            + TaskContract.TaskEntry.COLUMN_TASK_NAME  + " TEXT NOT NULL , "
-            + TaskContract.TaskEntry.COLUMN_TASK_TYPE + " TEXT NOT NULL , "
-            + TaskContract.TaskEntry.COLUMN_TASk_STARTING_DATE + " DATE , "
-            + TaskContract.TaskEntry.COLUMN_TASk_ENDING_DATE + " DATE , "
-            + TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME + " TIME , "
-            + TaskContract.TaskEntry.COLUMN_TASk_MAKE_IT_A_HABIT + " BOOLEAN , "
-            + TaskContract.TaskEntry.COLUMN_TASk_NUMBER_OF_DAYS_PERFORMED + " INTEGER NOT NULL , "
-            + TaskContract.TaskEntry.COLUMN_TASk_TOTAL_NUMBER_OF_DAYS + " INTEGER NOT NULL ); " ;
+            + TaskContract.TaskEntry.COLUMN_TASK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + TaskContract.TaskEntry.COLUMN_TASK_NAME + " TEXT NOT NULL, "
+            + TaskContract.TaskEntry.COLUMN_TASK_TYPE + " TEXT NOT NULL, "
+            + TaskContract.TaskEntry.COLUMN_TASk_STARTING_DATE + " TEXT, "
+            + TaskContract.TaskEntry.COLUMN_TASk_ENDING_DATE + " TEXT, "
+            + TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_HOUR + " INTEGER NOT NULL, "
+            + TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_MINUTE + " INTEGER NOT NULL, "
+            + TaskContract.TaskEntry.COLUMN_TASk_MAKE_IT_A_HABIT + " BOOLEAN, "
+            + TaskContract.TaskEntry.COLUMN_TASk_NUMBER_OF_DAYS_PERFORMED + " INTEGER NOT NULL, "
+            + TaskContract.TaskEntry.COLUMN_TASk_TOTAL_NUMBER_OF_DAYS + " INTEGER NOT NULL );" ;
 
     String SQL_DELETE_ENTRIES = "DROP TABLE " + TaskContract.TaskEntry.TABLE_NAME;
 
-    public DatabaseHelper(Context context, String name, int version, String DATABASE_NAME, Integer DATABASE_VERSION) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.DATABASE_NAME = DATABASE_NAME;
-        this.DATABASE_VERSION = DATABASE_VERSION;
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.example.shivam.notifyme.Activity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.shivam.notifyme.Data.DatabaseHelper;
+import com.example.shivam.notifyme.Data.TaskContract;
 import com.example.shivam.notifyme.Others.NotificationReceiver;
 import com.example.shivam.notifyme.R;
 import java.util.Calendar;
@@ -40,7 +44,9 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
     String taskNameInput;
     String taskTypeSelected;
 
-    int hourOfDay, minute, currentHours, currentMinutes;
+    int hourOfDay, minute;
+    boolean makeItAHabitIsChecked = false;
+    Date fromDate, toDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,22 +108,45 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
                         AlarmManager.INTERVAL_DAY, pendingIntent);
 
             Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_SHORT).show();
+            insertData();
             finish();
             }
         }
         );
 
         makeItAHabit = findViewById(R.id.checkboxMakeItAHabit);
-
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+    }
 
+    private void insertData()
+    {
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+
+        taskNameInput = editTask.getText().toString();
+        taskTypeSelected = spin.getSelectedItem().toString();
+        hourOfDay = timePickerNotifyAt.getCurrentHour();
+        minute = timePickerNotifyAt.getCurrentMinute();
+        makeItAHabitIsChecked =  makeItAHabit.isChecked();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASK_NAME, taskNameInput);
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASK_TYPE, taskTypeSelected);
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_STARTING_DATE, String.valueOf(calendarViewFrom.getDate()));
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_ENDING_DATE, String.valueOf(calendarViewTo.getDate()));
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_HOUR, hourOfDay);
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_MINUTE, minute);
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_MAKE_IT_A_HABIT, makeItAHabitIsChecked);
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_NUMBER_OF_DAYS_PERFORMED, 0);
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_TOTAL_NUMBER_OF_DAYS, 365);
+
+        long rowId = sqLiteDatabase.insert(TaskContract.TaskEntry.TABLE_NAME, null, contentValues);
     }
 }

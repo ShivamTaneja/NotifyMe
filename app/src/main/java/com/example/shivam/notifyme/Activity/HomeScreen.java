@@ -1,6 +1,8 @@
 package com.example.shivam.notifyme.Activity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -8,9 +10,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.shivam.notifyme.Data.DatabaseHelper;
+import com.example.shivam.notifyme.Data.TaskContract;
 import com.example.shivam.notifyme.R;
 import com.stephentuso.welcome.WelcomeHelper;
 
@@ -19,6 +26,8 @@ public class HomeScreen extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private WelcomeHelper welcomeScreen;
+    private ListView listView;
+    private TextView defaultTextView;
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -43,6 +52,8 @@ public class HomeScreen extends AppCompatActivity {
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        listView = findViewById(R.id.listview);
+        defaultTextView = findViewById(R.id.defaultTextView);
 
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
@@ -70,6 +81,8 @@ public class HomeScreen extends AppCompatActivity {
             CURRENT_TAG = TAG_HOME;
             loadHome();
         }
+
+        displayDatabaseInfo();
     }
 
     @Override
@@ -216,4 +229,19 @@ public class HomeScreen extends AppCompatActivity {
 
         super.onBackPressed();
     }
+
+    private void displayDatabaseInfo() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        SQLiteDatabase sqLiteDatabase = databaseHelper.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TaskContract.TaskEntry.TABLE_NAME, null);
+        try
+        {
+            Log.e("twitter"," SD "+cursor.getCount());
+        }
+        finally {
+            cursor.close();
+        }
+    }
 }
+
+
