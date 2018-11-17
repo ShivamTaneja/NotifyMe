@@ -138,5 +138,7 @@
     <string name="discard_changes">Discard changes</string>
     <string name="delete_record">Delete record</string>
     <string name="insert_data">Insert data</string>
+    <string name="Task_Name_is_missing">Task Name is missing</string>
+    <string name="Task_Type_is_missing">Task type is missing</string>
 
 </resources>
