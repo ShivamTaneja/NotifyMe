@@ -28,6 +28,10 @@
         <activity android:name=".Activity.Settings" />
         <activity android:name=".Activity.NotificationActivity" />
         <receiver android:name=".Others.NotificationReceiver"/>
+        <provider
+            android:authorities="com.example.shivam.notifyme"
+            android:name=".Data.TaskProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

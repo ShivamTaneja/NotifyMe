@@ -133,5 +133,10 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="delete_all_data">Delete all data</string>
+    <string name="save_changes">Save changes</string>
+    <string name="discard_changes">Discard changes</string>
+    <string name="delete_record">Delete record</string>
+    <string name="insert_data">Insert data</string>
 
 </resources>
