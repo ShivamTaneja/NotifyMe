@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ public class EditYourTask extends AppCompatActivity implements LoaderManager.Loa
     CheckBox makeItAHabit;
     Button buttonSave;
     Calendar calendar;
+    TextView fromdate, toDate;
 
     String[] taskNames = {"Health & fitness", "Study", "Work", "Meeting", "Shopping", "Entertainment", "Relax", "Travel", "Family Time", "Others"};
     ArrayAdapter arrayAdapter;
@@ -56,8 +59,7 @@ public class EditYourTask extends AppCompatActivity implements LoaderManager.Loa
     String taskTypeSelected;
     int hourOfDay, minute;
     boolean makeItAHabitIsChecked = false;
-    long fromDate;
-    long toDate;
+    String fromDateString, toDateString;
 
     Uri currentUri;
     private static final int EXISTING_LOADER = 0;
@@ -84,12 +86,31 @@ public class EditYourTask extends AppCompatActivity implements LoaderManager.Loa
             makeItAHabit = findViewById(R.id.checkboxMakeItAHabit);
             buttonSave = findViewById(R.id.buttonSave);
             calendar = Calendar.getInstance();
-
+            fromdate = findViewById(R.id.fromdate);
+            toDate = findViewById(R.id.todate);
 
             spin.setOnItemSelectedListener(EditYourTask.this);
             arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, taskNames);
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spin.setAdapter(arrayAdapter);
+
+            calendarViewFrom.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(CalendarView view, int year, int month,
+                                                int dayOfMonth) {
+                    int correctMonth = month + 1;
+                    fromDateString = String.valueOf(year + "-" + correctMonth + "-" + dayOfMonth);
+                }
+            });
+            calendarViewTo.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(CalendarView view, int year, int month,
+                                                int dayOfMonth) {
+                    int correctMonth = month + 1;
+                    toDateString = String.valueOf(year + "-" + correctMonth + "-" + dayOfMonth);
+                }
+            });
+
 
             timePickerNotifyAt.setIs24HourView(false); // used to display AM/PM mode
 
@@ -164,8 +185,6 @@ public class EditYourTask extends AppCompatActivity implements LoaderManager.Loa
             return;
         }
         taskTypeSelected = spin.getSelectedItem().toString();
-        fromDate = calendarViewFrom.getDate();
-        toDate = calendarViewTo.getDate();
         hourOfDay = timePickerNotifyAt.getCurrentHour();
         minute = timePickerNotifyAt.getCurrentMinute();
         makeItAHabitIsChecked =  makeItAHabit.isChecked();
@@ -173,8 +192,8 @@ public class EditYourTask extends AppCompatActivity implements LoaderManager.Loa
         ContentValues contentValues = new ContentValues();
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASK_NAME, taskNameInput);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASK_TYPE, taskTypeSelected);
-        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_STARTING_DATE, String.valueOf(calendarViewFrom.getDate()));
-        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_ENDING_DATE, String.valueOf(calendarViewTo.getDate()));
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_STARTING_DATE, fromDateString);
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_ENDING_DATE, toDateString);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_HOUR, hourOfDay);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_MINUTE, minute);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_MAKE_IT_A_HABIT, makeItAHabitIsChecked);
@@ -223,20 +242,25 @@ public class EditYourTask extends AppCompatActivity implements LoaderManager.Loa
 
             taskNameInput = cursor.getString(tasknameColumnIndex);
             taskTypeSelected = cursor.getString(tasktypeColumnIndex);
-            fromDate = cursor.getLong(fromDateColumnIndex);
-            toDate = cursor.getLong(toDateColumnIndex);
+            fromDateString = cursor.getString(fromDateColumnIndex);
+            toDateString = cursor.getString(toDateColumnIndex);
             hourOfDay = cursor.getInt(notifytimehours);
             minute = cursor.getInt(notifytimeminutes);
-            makeItAHabitIsChecked = Boolean.parseBoolean(cursor.getString(makeItAhabitColumnIndex));
+            String make = cursor.getString(makeItAhabitColumnIndex);
 
+            String f = "Your from date is : " + fromDateString;
+            fromdate.setText(f);
+            String t = "Your to date is : " + toDateString;
+            toDate.setText(t);
             editTask.setText(taskNameInput);
             int spinnerPosition =  arrayAdapter.getPosition(taskTypeSelected);
             spin.setSelection(spinnerPosition);
-            calendarViewFrom.setDate(fromDate);
-            calendarViewTo.setDate(toDate);
             timePickerNotifyAt.setCurrentHour(hourOfDay);
             timePickerNotifyAt.setCurrentMinute(minute);
-            makeItAHabit.setChecked(makeItAHabitIsChecked);
+            if(make.equals("1"))
+             makeItAHabit.setChecked(true);
+            else
+             makeItAHabit.setChecked(false);
         }
     }
 

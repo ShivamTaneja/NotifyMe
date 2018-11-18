@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,8 @@ import com.example.shivam.notifyme.Data.DatabaseHelper;
 import com.example.shivam.notifyme.Data.TaskContract;
 import com.example.shivam.notifyme.Others.NotificationReceiver;
 import com.example.shivam.notifyme.R;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -48,8 +51,8 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
     String taskTypeSelected;
     int hourOfDay, minute;
     boolean makeItAHabitIsChecked = false;
-    long fromDate;
-    long toDate;
+    String fromDateString, toDateString;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,23 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, taskNames);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(arrayAdapter);
+
+        calendarViewFrom.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month,
+                                            int dayOfMonth) {
+                int correctMonth = month + 1;
+                fromDateString = String.valueOf(year + "-" + correctMonth + "-" + dayOfMonth);
+            }
+        });
+        calendarViewTo.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month,
+                                            int dayOfMonth) {
+                int correctMonth = month + 1;
+                toDateString = String.valueOf(year + "-" + correctMonth + "-" + dayOfMonth);
+            }
+        });
 
         timePickerNotifyAt.setIs24HourView(false); // used to display AM/PM mode
 
@@ -111,8 +131,6 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
             return;
         }
         taskTypeSelected = spin.getSelectedItem().toString();
-        fromDate = calendarViewFrom.getDate();
-        toDate = calendarViewTo.getDate();
         hourOfDay = timePickerNotifyAt.getCurrentHour();
         minute = timePickerNotifyAt.getCurrentMinute();
         makeItAHabitIsChecked =  makeItAHabit.isChecked();
@@ -120,8 +138,8 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
         ContentValues contentValues = new ContentValues();
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASK_NAME, taskNameInput);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASK_TYPE, taskTypeSelected);
-        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_STARTING_DATE, String.valueOf(calendarViewFrom.getDate()));
-        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_ENDING_DATE, String.valueOf(calendarViewTo.getDate()));
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_STARTING_DATE, fromDateString);
+        contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_ENDING_DATE, toDateString);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_HOUR, hourOfDay);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_MINUTE, minute);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_MAKE_IT_A_HABIT, makeItAHabitIsChecked);

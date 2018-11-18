@@ -109,6 +109,15 @@
 
         </LinearLayout>
 
+            <TextView
+                android:id="@+id/fromdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/tendp"
+                />
+
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/onedp"
@@ -142,6 +151,13 @@
                 android:firstDayOfWeek="2" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/todate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/tendp"
+            />
 
         <View
             android:layout_width="match_parent"

@@ -58,10 +58,14 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
     private static final int TASK_LOADER = 0;
     private TaskCursorAdapter taskCursorAdapter;
 
+    ActionBarDrawerToggle actionBarDrawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -85,7 +89,6 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
 
         // load nav menu header data
         loadNavHeader();
-
         // initializing navigation menu
         setUpNavigationView();
 
@@ -104,19 +107,12 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long id) {
-                Log.d("twitter","sd");
                 Intent intent = new Intent(getApplicationContext(), EditYourTask.class);
                 Uri currentUri = ContentUris.withAppendedId(TaskContract.TaskEntry.CONTENT_URI, id);
                 intent.setData(currentUri);
                 startActivity(intent);
             }
         });
-      /*  listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-            }
-        });*/
     }
 
     @Override
@@ -141,11 +137,13 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
+            listView.setVisibility(View.VISIBLE);
             drawer.closeDrawers();
             return;
         }
 
         //Closing drawer on item click
+        listView.setVisibility(View.VISIBLE);
         drawer.closeDrawers();
 
     }
@@ -170,6 +168,7 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         // home
+                        listView.setVisibility(View.VISIBLE);
                         drawer.closeDrawers();
                         break;
                     case R.id.nav_performance:
@@ -177,6 +176,7 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
                         CURRENT_TAG = TAG_PERFORMANCE;
                         intent = new Intent(getApplicationContext(), Performance.class);
                         startActivity(intent);
+                        listView.setVisibility(View.VISIBLE);
                         drawer.closeDrawers();
                         break;
                     case R.id.nav_notifications:
@@ -184,6 +184,7 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
                         CURRENT_TAG = TAG_NOTIFICATIONS;
                         intent = new Intent(getApplicationContext(),NotificationActivity.class);
                         startActivity(intent);
+                        listView.setVisibility(View.VISIBLE);
                         drawer.closeDrawers();
                         break;
                     case R.id.nav_settings:
@@ -191,6 +192,7 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
                         CURRENT_TAG = TAG_SETTINGS;
                         intent = new Intent(getApplicationContext(),Settings.class);
                         startActivity(intent);
+                        listView.setVisibility(View.VISIBLE);
                         drawer.closeDrawers();
                         break;
                     case R.id.nav_about_us:
@@ -198,10 +200,12 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
                         CURRENT_TAG = TAG_ABOUT_US;
                         intent = new Intent(getApplicationContext(),AboutUs.class);
                         startActivity(intent);
+                        listView.setVisibility(View.VISIBLE);
                         drawer.closeDrawers();
                         break;
                     default:
                         navItemIndex = 0;
+                        listView.setVisibility(View.VISIBLE);
                         drawer.closeDrawers();
                 }
 
@@ -219,18 +223,21 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
             }
         });
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.openDrawer, R.string.closeDrawer) {
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.openDrawer, R.string.closeDrawer) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
                 super.onDrawerClosed(drawerView);
+                listView.setVisibility(View.VISIBLE);
                 }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
+                listView.setVisibility(View.INVISIBLE);
+
             }
         };
 
@@ -244,6 +251,7 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
+            listView.setVisibility(View.VISIBLE);
             drawer.closeDrawers();
             return;
         }
@@ -322,6 +330,9 @@ public class HomeScreen extends AppCompatActivity implements LoaderManager.Loade
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         switch (item.getItemId())
         {
             case R.id.deleteAllRecord:
