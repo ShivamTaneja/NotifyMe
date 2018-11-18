@@ -27,10 +27,8 @@ public final class TaskContract {
         public static final String COLUMN_TASk_NUMBER_OF_DAYS_PERFORMED = "NumberOfDaysTaskPerformed";
         public static final String COLUMN_TASk_TOTAL_NUMBER_OF_DAYS = "TotalNumberOfDays";
 
-
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PRODUCT_INFORMATION);
         public static final String CONTENT_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCT_INFORMATION;
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCT_INFORMATION;
-
         }
 }

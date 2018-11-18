@@ -1,27 +1,37 @@
 package com.example.shivam.notifyme.Activity;
 
+import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.example.shivam.notifyme.Data.DatabaseHelper;
+import android.widget.Toast;
 import com.example.shivam.notifyme.Data.TaskContract;
+import com.example.shivam.notifyme.Data.TaskCursorAdapter;
 import com.example.shivam.notifyme.R;
 import com.stephentuso.welcome.WelcomeHelper;
 
-public class HomeScreen extends AppCompatActivity {
+public class HomeScreen extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -45,6 +55,9 @@ public class HomeScreen extends AppCompatActivity {
     // flag to load home activity when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
 
+    private static final int TASK_LOADER = 0;
+    private TaskCursorAdapter taskCursorAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +65,7 @@ public class HomeScreen extends AppCompatActivity {
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        listView = findViewById(R.id.listview);
+        listView = findViewById(R.id.listview1);
         defaultTextView = findViewById(R.id.defaultTextView);
 
         // load toolbar titles from string resources
@@ -82,7 +95,28 @@ public class HomeScreen extends AppCompatActivity {
             loadHome();
         }
 
-        displayDatabaseInfo();
+        listView.setEmptyView(defaultTextView);
+        taskCursorAdapter = new TaskCursorAdapter(this, null);
+        listView.setAdapter(taskCursorAdapter);
+
+        getSupportLoaderManager().initLoader(TASK_LOADER, null, this);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long id) {
+                Log.d("twitter","sd");
+                Intent intent = new Intent(getApplicationContext(), EditYourTask.class);
+                Uri currentUri = ContentUris.withAppendedId(TaskContract.TaskEntry.CONTENT_URI, id);
+                intent.setData(currentUri);
+                startActivity(intent);
+            }
+        });
+      /*  listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+            }
+        });*/
     }
 
     @Override
@@ -230,17 +264,73 @@ public class HomeScreen extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void displayDatabaseInfo() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(this);
-        SQLiteDatabase sqLiteDatabase = databaseHelper.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TaskContract.TaskEntry.TABLE_NAME, null);
-        try
+    private void delete_record(){
+        int id = getContentResolver().delete(TaskContract.TaskEntry.CONTENT_URI, null, null);
+        if (id == -1) {
+            Toast.makeText(this, R.string.deletion_failed, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.deletion_successful, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_all_data);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                delete_record();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
+
+        String[] projection = {TaskContract.TaskEntry._ID, TaskContract.TaskEntry.COLUMN_TASK_NAME,
+                TaskContract.TaskEntry.COLUMN_TASK_TYPE, TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_HOUR,
+         TaskContract.TaskEntry.COLUMN_TASk_NOTIFICATION_TIME_MINUTE};
+
+        return new CursorLoader(this, TaskContract.TaskEntry.CONTENT_URI, projection,
+                null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        taskCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        taskCursorAdapter.swapCursor(null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_screen_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
         {
-            Log.e("twitter"," SD "+cursor.getCount());
+            case R.id.deleteAllRecord:
+                showDeleteConfirmationDialog();
+                break;
+            default:
+                return true;
         }
-        finally {
-            cursor.close();
-        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

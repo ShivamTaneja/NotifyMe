@@ -27,11 +27,15 @@
         <activity android:name=".Activity.AboutUs" />
         <activity android:name=".Activity.Settings" />
         <activity android:name=".Activity.NotificationActivity" />
-        <receiver android:name=".Others.NotificationReceiver"/>
+
+        <receiver android:name=".Others.NotificationReceiver" />
+
         <provider
-            android:authorities="com.example.shivam.notifyme"
             android:name=".Data.TaskProvider"
-            android:exported="false"/>
+            android:authorities="com.example.shivam.notifyme"
+            android:exported="false" />
+
+        <activity android:name=".Activity.EditYourTask" />
     </application>
 
 </manifest>

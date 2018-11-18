@@ -15,5 +15,8 @@
     <dimen name="profile_width">75dp</dimen>
     <dimen name="profile_height">75dp</dimen>
     <dimen name="eight">8</dimen>
+    <dimen name="ten">10dp</dimen>
+    <dimen name="fivedp">5dp</dimen>
+    <dimen name="twodp">2dp</dimen>
 
 </resources>

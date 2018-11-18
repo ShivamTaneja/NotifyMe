@@ -140,5 +140,17 @@
     <string name="insert_data">Insert data</string>
     <string name="Task_Name_is_missing">Task Name is missing</string>
     <string name="Task_Type_is_missing">Task type is missing</string>
+    <string name="deletion_failed">Deletion failed</string>
+    <string name="deletion_successful">Deletion Successful</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
+    <string name="editor_delete_data_successful">Data deleted </string>
+    <string name="editor_delete_data_failed">Error with deleting data</string>
+    <string name="data_changed_successfully">Data Changed successfully</string>
+    <string name="data_not_changed">data not changed</string>
+
 
 </resources>

@@ -5,12 +5,15 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,58 +46,38 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
     String[] taskNames = {"Health & fitness", "Study", "Work", "Meeting", "Shopping", "Entertainment", "Relax", "Travel", "Family Time", "Others"};
     String taskNameInput;
     String taskTypeSelected;
-
     int hourOfDay, minute;
     boolean makeItAHabitIsChecked = false;
-    Date fromDate, toDate;
+    long fromDate;
+    long toDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_your_task);
 
-        //task
         editTask = findViewById(R.id.editTask);
-
-        //spinner
         spin = findViewById(R.id.simple_spinner);
+        calendarViewFrom = findViewById(R.id.simpleCalendarViewFrom);
+        calendarViewTo = findViewById(R.id.simpleCalendarViewTo);
+        timePickerNotifyAt = findViewById(R.id.timepickerNotifyAt);
+        makeItAHabit = findViewById(R.id.checkboxMakeItAHabit);
+        buttonSave = findViewById(R.id.buttonSave);
+        calendar = Calendar.getInstance();
+
         spin.setOnItemSelectedListener(AddYourTask.this);
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, taskNames);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(arrayAdapter);
-        taskTypeSelected = spin.getSelectedItem().toString();
 
-        //time picker
-        timePickerNotifyAt = findViewById(R.id.timepickerNotifyAt);
         timePickerNotifyAt.setIs24HourView(false); // used to display AM/PM mode
-        // perform set on time changed listener event
-        timePickerNotifyAt.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) { 
-                
-            }
-        });
 
-        calendarViewFrom = findViewById(R.id.simpleCalendarViewFrom);
-        calendarViewTo = findViewById(R.id.simpleCalendarViewTo);
-
-        //calendar
-        buttonSave = findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
 
-                taskNameInput = editTask.getText().toString();
-                if(TextUtils.isEmpty(taskNameInput))
-                {
-                    Toast.makeText(getApplicationContext(),"Task Name is missing",Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 hourOfDay = timePickerNotifyAt.getCurrentHour();
                 minute = timePickerNotifyAt.getCurrentMinute();
-
-                Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 calendar.set(Calendar.MINUTE, minute);
                 calendar.set(Calendar.SECOND,1);
@@ -106,15 +89,10 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         AlarmManager.INTERVAL_DAY, pendingIntent);
-
-            Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_SHORT).show();
-            insertData();
-            finish();
+                insertData();
             }
         }
         );
-
-        makeItAHabit = findViewById(R.id.checkboxMakeItAHabit);
     }
 
     @Override
@@ -127,11 +105,14 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
 
     private void insertData()
     {
-        DatabaseHelper databaseHelper = new DatabaseHelper(this);
-        SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
-
         taskNameInput = editTask.getText().toString();
+        if(TextUtils.isEmpty(taskNameInput)) {
+            Toast.makeText(getApplicationContext(), R.string.Task_Name_is_missing, Toast.LENGTH_SHORT).show();
+            return;
+        }
         taskTypeSelected = spin.getSelectedItem().toString();
+        fromDate = calendarViewFrom.getDate();
+        toDate = calendarViewTo.getDate();
         hourOfDay = timePickerNotifyAt.getCurrentHour();
         minute = timePickerNotifyAt.getCurrentMinute();
         makeItAHabitIsChecked =  makeItAHabit.isChecked();
@@ -147,6 +128,35 @@ public class AddYourTask extends AppCompatActivity implements AdapterView.OnItem
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_NUMBER_OF_DAYS_PERFORMED, 0);
         contentValues.put(TaskContract.TaskEntry.COLUMN_TASk_TOTAL_NUMBER_OF_DAYS, 365);
 
-        long rowId = sqLiteDatabase.insert(TaskContract.TaskEntry.TABLE_NAME, null, contentValues);
+        //long rowId = sqLiteDatabase.insert(TaskContract.TaskEntry.TABLE_NAME, null, contentValues);
+        Uri uri = getContentResolver().insert(TaskContract.TaskEntry.CONTENT_URI, contentValues);
+        if (uri == null)
+            Toast.makeText(getApplicationContext(), "Data did not inserted", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getApplicationContext(), "Data inserted", Toast.LENGTH_SHORT).show();
+
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.insert_product_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.insert_data:
+                insertData();
+                break;
+            case R.id.discard_changes:
+                finish();
+                break;
+            default:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

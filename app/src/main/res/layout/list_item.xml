@@ -2,20 +2,41 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#5600695c"
+    android:layout_margin="@dimen/tendp"
+    >
     <TextView
         android:id="@+id/taskname"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
-        android:textAppearance="?android:textAppearanceMedium"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_margin="@dimen/tendp"
+        android:layout_weight="1"
+        android:gravity="left"
         />
     <TextView
         android:id="@+id/tasktype"
-        android:layout_width="match_parent"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_margin="@dimen/tendp"
+        android:textStyle="italic"
+        android:layout_weight="1"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/notifytime"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceSmall"
-         />
+        android:layout_margin="@dimen/tendp"
+        android:textStyle="italic"
+        android:gravity="right"
+        android:layout_weight="1"
+        />
 </LinearLayout>
