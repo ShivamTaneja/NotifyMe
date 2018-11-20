@@ -78,7 +78,7 @@ public class EditYourTask extends AppCompatActivity implements LoaderManager.Loa
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_edit_your_task);
 
-            editTask = findViewById(R.id.editTask);
+        editTask = findViewById(R.id.editTask);
             spin = findViewById(R.id.simple_spinner);
             calendarViewFrom = findViewById(R.id.simpleCalendarViewFrom);
             calendarViewTo = findViewById(R.id.simpleCalendarViewTo);

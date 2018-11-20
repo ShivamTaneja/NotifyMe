@@ -6,9 +6,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.HomeScreen">
@@ -18,15 +18,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.AddYourTask" />
+        <activity android:name=".Activity.AddYourTask"
+            android:label="Add your task"
+            />
         <activity
             android:name=".Activity.WelcomeScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/WelcomeScreenTheme" />
-        <activity android:name=".Activity.Performance" />
-        <activity android:name=".Activity.AboutUs" />
-        <activity android:name=".Activity.Settings" />
-        <activity android:name=".Activity.NotificationActivity" />
+
+        <activity android:name=".Activity.Performance"
+            android:parentActivityName=".Activity.HomeScreen"
+            android:label="Performance"
+            />
+
+        <activity android:name=".Activity.AboutUs"
+            android:parentActivityName=".Activity.HomeScreen"
+            android:label="About us"
+            />
+
+        <activity android:name=".Activity.Settings"
+            android:parentActivityName=".Activity.HomeScreen"
+            android:label="Settings"
+            />
+
+        <activity android:name=".Activity.NotificationActivity"
+            android:parentActivityName=".Activity.HomeScreen"
+            android:label="Notifications"
+            />
 
         <receiver android:name=".Others.NotificationReceiver" />
 
@@ -35,7 +53,9 @@
             android:authorities="com.example.shivam.notifyme"
             android:exported="false" />
 
-        <activity android:name=".Activity.EditYourTask" />
+        <activity android:name=".Activity.EditYourTask"
+            android:label="Edit your task"
+            />
     </application>
 
 </manifest>

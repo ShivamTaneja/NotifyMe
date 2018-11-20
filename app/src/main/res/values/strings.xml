@@ -151,6 +151,10 @@
     <string name="editor_delete_data_failed">Error with deleting data</string>
     <string name="data_changed_successfully">Data Changed successfully</string>
     <string name="data_not_changed">data not changed</string>
+    <string name="we_are_uietians">WE ARE UIETIANS</string>
+    <string name="next">Show Performance</string>
+    <string name="output">Output</string>
+    <string name="next1">Next</string>
 
 
 </resources>
